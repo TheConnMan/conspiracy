@@ -23,12 +23,16 @@
   "homepage": "https://github.com/TheConnMan/conspiracy#readme",
   "dependencies": {
     "aws-sdk": "^2.159.0",
-    "log4js": "^2.3.11"
+    "log4js": "^2.3.11",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "@types/log4js": "^2.3.5",
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.0.47",
+    "@types/request": "^2.0.8",
+    "@types/request-promise": "^4.1.39",
     "@types/sinon": "^2.2.2",
     "mocha": "^3.4.2",
     "nyc": "^10.3.2",

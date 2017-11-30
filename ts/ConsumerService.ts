@@ -1,5 +1,9 @@
 import * as AWS from 'aws-sdk';
 
+import * as log4js from 'log4js';
+
+const logger = log4js.getLogger();
+
 class ConsumerService {
 
   public sqsClient: AWS.SQS;
@@ -24,6 +28,9 @@ class ConsumerService {
     try {
       const me = this;
       const messages: AWS.SQS.Message[] = await this.getMessages();
+      if (messages.length !== 0) {
+        logger.info(`Processing ${messages.length} message(s)`);
+      }
       return Promise.all(messages.map((message) => me.processMessage(message)));
     } catch (e) {
       return Promise.all([]);
@@ -49,6 +56,9 @@ class ConsumerService {
     const me = this;
     const body = JSON.parse(message.Body);
     return me.consumerFn(body).then(() => {
+      return me.deleteMessage(message);
+    }).catch((e) => {
+      logger.error(`Error processing message: ${e.message}`, e.cause);
       return me.deleteMessage(message);
     });
   }
