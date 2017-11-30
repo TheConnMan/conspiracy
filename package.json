@@ -1,0 +1,54 @@
+{
+  "name": "conspiracy",
+  "version": "0.1.0",
+  "description": "Conspiracy - The inside job runner",
+  "main": "js/index.js",
+  "types": "js/index.d.ts",
+  "scripts": {
+    "start": "npm run compile && node js/index.js",
+    "compile": "tsc -p tsconfig.json",
+    "test-only": "nyc mocha",
+    "test": "npm run lint && npm run test-only",
+    "lint": "tslint -p tslint.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheConnMan/conspiracy.git"
+  },
+  "author": "TheConnMan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheConnMan/conspiracy/issues"
+  },
+  "homepage": "https://github.com/TheConnMan/conspiracy#readme",
+  "dependencies": {
+    "aws-sdk": "^2.159.0",
+    "log4js": "^2.3.11"
+  },
+  "devDependencies": {
+    "@types/log4js": "^2.3.5",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^8.0.47",
+    "@types/sinon": "^2.2.2",
+    "mocha": "^3.4.2",
+    "nyc": "^10.3.2",
+    "sinon": "^2.3.2",
+    "ts-node": "^3.0.4",
+    "tslint": "^5.8.0",
+    "typescript": "^2.3.3"
+  },
+  "nyc": {
+    "include": [
+      "ts/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}
