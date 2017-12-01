@@ -18,30 +18,27 @@ class ConsumerService {
   }
 
   public run(): Promise<string> {
-    const me = this;
-    return me.processMessages().then(() => {
-      return me.run();
+    return this.processMessages().then(() => {
+      return this.run();
     });
   }
 
   private async processMessages(): Promise<void[]> {
     try {
-      const me = this;
       const messages: AWS.SQS.Message[] = await this.getMessages();
       if (messages.length !== 0) {
         logger.info(`Processing ${messages.length} message(s)`);
       }
-      return Promise.all(messages.map((message) => me.processMessage(message)));
+      return Promise.all(messages.map((message) => this.processMessage(message)));
     } catch (e) {
       return Promise.all([]);
     }
   }
 
   private getMessages(): Promise<AWS.SQS.Message[]> {
-    const me = this;
     return new Promise((resolve, reject) => {
-      me.sqsClient.receiveMessage({
-        QueueUrl: me.queueUrl
+      this.sqsClient.receiveMessage({
+        QueueUrl: this.queueUrl
       }, (err, data) => {
         if (err) {
           reject(err);
@@ -53,21 +50,19 @@ class ConsumerService {
   }
 
   private processMessage(message: AWS.SQS.Message): Promise<void> {
-    const me = this;
     const body = JSON.parse(message.Body);
-    return me.consumerFn(body).then(() => {
-      return me.deleteMessage(message);
+    return this.consumerFn(body).then(() => {
+      return this.deleteMessage(message);
     }).catch((e) => {
       logger.error(`Error processing message: ${e.message}`, e.cause);
-      return me.deleteMessage(message);
+      return this.deleteMessage(message);
     });
   }
 
   private deleteMessage(message: AWS.SQS.Message): Promise<null> {
-    const me = this;
     return new Promise((resolve, reject) => {
-      me.sqsClient.deleteMessage({
-        QueueUrl: me.queueUrl,
+      this.sqsClient.deleteMessage({
+        QueueUrl: this.queueUrl,
         ReceiptHandle: message.ReceiptHandle
       }, (err, data) => {
         if (err) {
